@@ -1,6 +1,7 @@
 from playwright.sync_api import sync_playwright
 import time
 from bs4 import BeautifulSoup
+import csv
 
 p = sync_playwright().start()
 
@@ -38,5 +39,14 @@ for job in jobs:
   }
   job_db.append(job)
 
-print(job_db)
-print(len(job_db))
+# .csv(comma separated values) = 쉼표로 나누어진 값
+# Excel 파일과 비슷하지만 더 범용성이 있다. (Excel이나 MacOS의 Pages처럼 다양한 방법으로 읽을 수 있다.)
+# csv 파일 미리보기 확장자 = Excel Viewer
+file = open("jobs.csv", "w", encoding="utf-8")
+writer = csv.writer(file)
+writer.writerow(["Title", "Company", "Reword", "Link"])
+
+for job in job_db:
+  writer.writerow(job.values())
+
+file.close()
